@@ -18,7 +18,6 @@ const searchAllItems = (event) => {
         {
             noItemFound.style.display = "none";
             productCards[i].style.display = "grid";
-            productCards[i].style.placeItems = "center";
             itemFound = true; 
         } 
         else //hides all incompatible product cards

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { db } = require('../config');
-const { collection, addDoc, doc, getDoc } = require('firebase/firestore');
+const { collection, addDoc, doc, getDocs, getDoc } = require('firebase/firestore');
 
 router.post('/addInquiry', async (req, res) => {
     const { firstName, lastName, email, contactNo, inquiries, userId } = req.body;
@@ -28,6 +28,10 @@ router.post('/addInquiry', async (req, res) => {
 
         if (contactNo) {
             inquiryData.contactNo = contactNo;
+        }
+        else
+        {
+            inquiryData.contactNo = 'N/A';
         }
 
         const inquiriesCollectionRef = collection(db, 'inquiries');

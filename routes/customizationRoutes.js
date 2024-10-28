@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const { db } = require('../config');
-const { collection, addDoc, getDocs } = require('firebase/firestore');
+const { collection, addDoc, getDocs, getDoc, doc} = require('firebase/firestore');
 const { getStorage, ref, uploadBytes, getDownloadURL} = require('firebase/storage');
 
 const storage = getStorage();
@@ -17,7 +17,6 @@ router.post('/addCustomization', upload.array('files'), async (req, res) => {
             firstName,
             lastName,
             email,
-            contactNo: contactNo || null,
             houseNumber,
             province,
             zipCode,
@@ -25,6 +24,15 @@ router.post('/addCustomization', upload.array('files'), async (req, res) => {
             userId,
             fileUrls: [] 
         };
+
+        if (contactNo)
+        {
+            inquiryData.contactNo = contactNo;
+        }
+        else
+        {
+            inquiryData.contactNo = 'N/A'
+        }
 
         const files = req.files; 
         
@@ -58,29 +66,44 @@ router.post('/addCustomization', upload.array('files'), async (req, res) => {
     } 
     catch (error) 
     {
-        console.error('Error adding inquiry:', error); // Log any errors
+        console.error('Error adding inquiry:', error); 
         res.status(500).json({ message: 'Failed to add inquiry', error: error.message });
     }
 });
 
 
 router.get('/allCustomizations', async (req, res) => {
-    try
-    {
+    try {
         const querySnapshot = await getDocs(collection(db, 'customizations'));
         const customizations = [];
 
-        querySnapshot.forEach((doc) => {
-            const customizationData = doc.data();
-            customizations.push({ id: doc.id, ...customizationData});
-        });
+        for (const docSnapshot of querySnapshot.docs) { 
+            const customizationData = docSnapshot.data();
+            const userId = customizationData.userId;
+
+            const userDoc = await getDoc(doc(db, 'users', userId));
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                customizations.push({
+                    id: docSnapshot.id,
+                    ...customizationData,
+                    username: userData.username 
+                });
+            } else {
+                
+                customizations.push({
+                    id: docSnapshot.id,
+                    ...customizationData,
+                    username: null 
+                });
+            }
+        }
 
         res.json(customizations);
-    }
-    catch(error)
-    {
-        console.error('Error encountered in fetching all user inquiries. ', error);
-        res.status(500).send('Error fetching all user inquiries.');
+    } catch (error) {
+        console.error('Error encountered in fetching all customizations: ', error);
+        res.status(500).send('Error fetching all customizations.');
     }
 });
 

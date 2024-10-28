@@ -62,12 +62,12 @@ async function renderData() {
                     </div>
                     <div class="button-container-delete button-container-product">
                         <button type="button" class="btn delete-button" style="background-color:#ff4d4d " data-id="${item.id}">
-                            DELETE PRODUCT
+                            <p>DELETE PRODUCT</p>
                         </button>
                     </div>
                     <div class="button-container-update button-container-product">
                         <button type="button" class="btn update-button" style="background-color:#00cc00" data-id="${item.id}">
-                            EDIT PRODUCT
+                            <p>EDIT PRODUCT</p>
                         </button>
                     </div>
                 </div>

@@ -9,8 +9,7 @@ const getFormData = async () => {
         const contactNo = document.querySelector('#contactNum').value;
         const inquiries = document.querySelector('#inquiries').value;
 
-      
-        form.reset();
+
 
         const userId = await retrieveId();
         console.log(`User ID: ${userId}`);
@@ -24,7 +23,7 @@ const getFormData = async () => {
             inquiries,
             userId
         };
-
+    
        
         try {
             const response = await fetch('/api/inquiries/addInquiry', { 
@@ -49,6 +48,8 @@ const getFormData = async () => {
             console.error('Error submitting inquiry:', error);
         }
     });
+    form.reset();
+    
 }
 
 const retrieveId = async () => {

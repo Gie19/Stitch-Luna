@@ -42,9 +42,18 @@ router.get('/userSignup', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../views/signup.html'));
 });
 
-// router.get('/adminUsers', function(req, res, next) {
-//   res.sendFile(path.join(__dirname, '../views/adminUsers.html'));
-// });
+router.get('/adminUsers', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../views/adminUsers.html'));
+});
+
+router.get('/adminCustom', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../views/adminCustom.html'));
+});
+
+router.get('/adminContact', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../views/adminContact.html'));
+});
+
 
 
 
